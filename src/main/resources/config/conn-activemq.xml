@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<!-- ========== Active MQ ========== -->
+	<bean id="ActiveMQXAConnectionFactory" class="org.apache.activemq.ActiveMQXAConnectionFactory">
+		<!-- <property name="brokerURL" value="vm://localhost" /> -->
+		<property name="brokerURL" value="${activemq.brokerUrl}" />
+		<property name="redeliveryPolicy">
+			<bean class="org.apache.activemq.RedeliveryPolicy">
+				<property name="maximumRedeliveries" value="3"/>
+				<property name="backOffMultiplier" value="1"/>
+				<property name="initialRedeliveryDelay" value="50"/>
+				<property name="redeliveryDelay" value="50"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="ActiveMQConnectionFactory" primary="true" init-method="init" destroy-method="close"
+		class="org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean">
+		<property name="uniqueResourceName" value="xaActiveMQ"/>
+		<property name="localTransactionMode" value="false"/>
+		<property name="xaConnectionFactory" ref="ActiveMQXAConnectionFactory"/>
+		<property name="minPoolSize" value="10"/>
+		<property name="maxPoolSize" value="100"/>
+	</bean>
+
+</beans>

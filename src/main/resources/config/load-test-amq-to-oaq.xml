@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:si-jms="http://www.springframework.org/schema/integration/jms"
+	xmlns:si="http://www.springframework.org/schema/integration"
+	xmlns:si-jmx="http://www.springframework.org/schema/integration/jmx"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+						http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd
+						http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-4.3.xsd
+						http://www.springframework.org/schema/integration/jmx http://www.springframework.org/schema/integration/jmx/spring-integration-jmx-4.3.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<import resource="conn-activemq.xml" />
+	<import resource="conn-oracle.xml" />
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+
+	<bean id="cachingDestinationResolver"
+		class="org.springframework.jms.support.destination.JndiDestinationResolver">
+		<property name="cache" value="true" />
+		<property name="fallbackToDynamicDestination" value="true" />
+	</bean>
+
+	<si:wire-tap pattern="myChannel" channel="logger" />
+
+	<bean id="ActiveMQ.JmsAdapater.container"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="ActiveMQConnectionFactory" />
+		<property name="destinationName" value="TEST.IN1" />
+		<property name="sessionTransacted" value="true" />
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="maxConcurrentConsumers" value="1" />
+		<property name="concurrentConsumers" value="1" />
+		<property name="receiveTimeout" value="1000" />
+		<property name="cacheLevel" value="3" />
+<!-- 		<property name="destinationResolver" ref="cachingDestinationResolver"/> -->
+		<property name="backOff">
+			<bean class="org.springframework.util.backoff.ExponentialBackOff">
+				<property name="initialInterval" value="2000" />
+				<property name="maxInterval" value="60000" />
+			</bean>
+		</property>
+	</bean>
+
+	<si-jms:message-driven-channel-adapter
+		id="ActiveMQ.JmsAdapater" channel="myChannel"
+		container="ActiveMQ.JmsAdapater.container" />
+
+	<si:channel id="myChannel"/>
+
+	<bean id="OracleAQ.JmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="OracleAQConnectionFactory" />
+		<property name="destinationResolver" ref="cachingDestinationResolver"/>
+	</bean>
+
+	<si:chain id="handler.chain" input-channel="myChannel">
+		<si-jms:outbound-channel-adapter id="OracleAQ.JmsAdapter"
+			destination-name="AQ.SRUMSGIN1" jms-template="OracleAQ.JmsTemplate">
+		</si-jms:outbound-channel-adapter>
+	</si:chain>
+
+
+	<si:logging-channel-adapter
+		id="logger" expression="headers" level="INFO" />
+
+	<si:channel id="errorChannel" />
+	
+	<bean id="errorHandler" class="example.ErrorHandler">
+		<property name="logStackTrace" value="false"/>
+	</bean>
+
+	<si:service-activator
+		input-channel="errorChannel" ref="errorHandler" method="handleError" />
+
+</beans>

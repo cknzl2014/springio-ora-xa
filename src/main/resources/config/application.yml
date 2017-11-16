@@ -1,0 +1,20 @@
+# default configuration
+# ---------------------
+spring:
+    application:
+        name: AmqToOaq 
+    jta:                                                                          # https://www.atomikos.com/Documentation/JtaProperties
+        enabled: true
+        service: com.atomikos.icatch.standalone.UserTransactionServiceFactory
+        max-actives: 200 
+        atomikos:
+            properties:
+                transactionManagerUniqueName: Unique Transaction Manager Name
+                defaultJtaTimeout: 300000
+                    
+activemq:
+    brokerUrl: tcp://localhost:61616
+oracle:
+    url: jdbc:oracle:thin:@localhost:1525:xe
+    username: aq
+    password: aq

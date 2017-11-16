@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<!-- ========== Oracle ========== -->
+    <bean id="OracleAQTransactionManager"
+        class="org.springframework.jms.connection.JmsTransactionManager">
+        <constructor-arg ref="OracleAQConnectionFactory" />
+	</bean>
+
+	<bean id="OracleAQConnectionFactory" class="oracle.jms.AQjmsFactory" factory-method="getConnectionFactory">
+		<constructor-arg ref="oracleDataSource" />
+	</bean>
+
+	<bean id="oracleDataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close" primary="true">
+		<property name="URL" value="${oracle.url}" />
+		<property name="user" value="${oracle.username}"/>
+		<property name="password" value="${oracle.password}"/>
+		<property name="connectionCachingEnabled" value="true"/>
+	</bean>
+</beans>

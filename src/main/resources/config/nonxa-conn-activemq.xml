@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<!-- ========== Active MQ ========== -->
+    <bean id="transactionManager"
+        class="org.springframework.jms.connection.JmsTransactionManager">
+        <constructor-arg ref="ActiveMQConnectionFactory" />
+	</bean>
+
+	<bean id="ActiveMQConnectionFactory" primary="true" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<!-- <property name="brokerURL" value="vm://localhost" /> -->
+		<property name="brokerURL" value="${activemq.brokerUrl}" />
+		<property name="redeliveryPolicy">
+			<bean class="org.apache.activemq.RedeliveryPolicy">
+				<property name="maximumRedeliveries" value="3"/>
+				<property name="backOffMultiplier" value="1"/>
+				<property name="initialRedeliveryDelay" value="50"/>
+				<property name="redeliveryDelay" value="50"/>
+			</bean>
+		</property>
+	</bean>
+
+</beans>
