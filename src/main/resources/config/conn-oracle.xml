@@ -4,7 +4,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 					    http://www.springframework.org/schema/data/orcl http://www.springframework.org/schema/data/orcl/spring-data-orcl-1.0.xsd">
 
-	<!-- ========== Oracle AQ ========== -->
 	<bean id="oracleDataSource" primary="true"
 		class="oracle.jdbc.xa.client.OracleXADataSource" destroy-method="close">
 		<property name="URL" value="${oracle.url}" />
@@ -12,22 +11,11 @@
 		<property name="password" value="${oracle.password}" />
 	</bean>
 
-	<bean id="xacf" class="oracle.jms.AQjmsFactory" factory-method="getXAConnectionFactory">
-		<constructor-arg ref="oracleDataSource" />
-	</bean>
+	<orcl:aq-jms-connection-factory id="OracleAQConnectionFactory"
+		connection-factory-type="QUEUE_CONNECTION" data-source="oracleDataSource" />
 
-	<!-- <orcl:aq-jms-connection-factory id="OracleAQConnectionFactory2" -->
-	<!-- connection-factory-type="QUEUE_CONNECTION" -->
-	<!-- data-source="oracleDataSource"/> -->
-
-	<bean id="OracleAQConnectionFactory" init-method="init"
-		destroy-method="close"
-		class="org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean">
-		<property name="uniqueResourceName" value="xaOracleAQ" />
-		<property name="localTransactionMode" value="false" />
-		<property name="xaConnectionFactory" ref="xacf" />
-		<!-- <property name="minPoolSize" value="10"/> -->
-		<!-- <property name="maxPoolSize" value="100"/> -->
-		<property name="poolSize" value="10" />
-	</bean>
+<!-- 	<bean id="OracleAQConnectionFactory" class="oracle.jms.AQjmsFactory" -->
+<!-- 		factory-method="getQueueConnectionFactory"> -->
+<!-- 		<constructor-arg ref="oracleDataSource" /> -->
+<!-- 	</bean> -->
 </beans>
