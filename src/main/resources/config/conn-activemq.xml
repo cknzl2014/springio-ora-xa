@@ -17,7 +17,7 @@
 		</property>
 	</bean>
 
-	<bean id="ActiveMQConnectionFactory" primary="true" init-method="init" destroy-method="close"
+	<bean id="ActiveMQConnectionFactory" primary="true"
 		class="org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean">
 		<property name="uniqueResourceName" value="xaActiveMQ"/>
 		<property name="localTransactionMode" value="false"/>

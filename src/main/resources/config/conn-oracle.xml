@@ -20,8 +20,7 @@
 	<!-- connection-factory-type="QUEUE_CONNECTION" -->
 	<!-- data-source="oracleDataSource"/> -->
 
-	<bean id="OracleAQConnectionFactory" init-method="init"
-		destroy-method="close"
+	<bean id="OracleAQConnectionFactory"
 		class="org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean">
 		<property name="uniqueResourceName" value="xaOracleAQ" />
 		<property name="localTransactionMode" value="false" />
