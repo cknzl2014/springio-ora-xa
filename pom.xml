@@ -18,7 +18,6 @@
 		<!-- Taken from Jenkins -->
 		<app.revision>${env.GIT_COMMIT}</app.revision>
 		<app.buildNr>${env.BUILD_NUMBER}</app.buildNr>
-		<nexus.repository.url>http://nexus:8081/repository</nexus.repository.url>
 	</properties>
 
 	<dependencies>
@@ -99,28 +98,28 @@
 			<groupId>com.oracle.java</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<scope>system</scope>
-			<systemPath>C:/data/VirtualBoxSharedFolder/ojdbc6.jar</systemPath>
+			<systemPath>${ORA_JARS}/ojdbc6.jar</systemPath>
 			<version>${oracle_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.java</groupId>
 			<artifactId>orai18n</artifactId>
 			<scope>system</scope>
-			<systemPath>C:/data/VirtualBoxSharedFolder/orai18n.jar</systemPath>
+			<systemPath>${ORA_JARS}/orai18n.jar</systemPath>
 			<version>${oracle_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.java</groupId>
 			<artifactId>orai18n-mapping</artifactId>
 			<scope>system</scope>
-			<systemPath>C:/data/VirtualBoxSharedFolder/orai18n-mapping.jar</systemPath>
+			<systemPath>${ORA_JARS}/orai18n-mapping.jar</systemPath>
 			<version>${oracle_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.java</groupId>
 			<artifactId>aqapi</artifactId>
 			<scope>system</scope>
-			<systemPath>C:/data/VirtualBoxSharedFolder/aqapi.jar</systemPath>
+			<systemPath>${ORA_JARS}/aqapi.jar</systemPath>
 			<version>${oracle_version}</version>
 		</dependency>
 	</dependencies>
