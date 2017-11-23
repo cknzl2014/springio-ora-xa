@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.annotation.DirtiesContext;
@@ -31,17 +30,6 @@ public class LoadTestAmqToOaq extends TestBase {
 	@Import({ BaseTestConfiguration.class })
 	@ImportResource({ "config/test-applicationContext.xml" })
 	public static class MyConfiguration {
-		@Bean
-		public QueueInitializer initializer() {
-			return new QueueInitializer() {
-
-				@Override
-				public void init() {
-					emptyAmqQueue(IN_AMQ_QUEUE_NAME);
-				}
-
-			};
-		}
 	}
 
 	@Test

@@ -13,11 +13,7 @@
 	<import resource="conn-activemq.xml" />
 	<import resource="conn-oracle.xml" />
 
-	<bean id="cachingDestinationResolver"
-		class="org.springframework.jms.support.destination.JndiDestinationResolver">
-		<property name="cache" value="true" />
-		<property name="fallbackToDynamicDestination" value="true" />
-	</bean>
+	<bean id="cachingDestinationResolver" class="example.CachingJmsDestinationResolver" />
 
 	<si:wire-tap pattern="myChannel" channel="logger" />
 
@@ -40,20 +36,18 @@
 	</bean>
 
 	<si-jms:message-driven-channel-adapter
-		id="ActiveMQ.JmsAdapater" channel="myChannel"
-		container="ActiveMQ.JmsAdapater.container" />
+		id="ActiveMQ.JmsAdapater" channel="myChannel" container="ActiveMQ.JmsAdapater.container" />
 
-	<si:channel id="myChannel"/>
+	<si:channel id="myChannel" />
 
 	<si:chain id="handler.chain" input-channel="myChannel">
 		<si-jms:outbound-channel-adapter id="OracleAQ.JmsAdapter"
-			connection-factory="OracleAQConnectionFactory" session-transacted="true" 
-			destination-name="AQ.SRUMSGIN1" destination-resolver="cachingDestinationResolver"
-			>
+			connection-factory="OracleAQConnectionFactory" session-transacted="true"
+			destination-name="AQ.SRUMSGIN1" destination-resolver="cachingDestinationResolver">
 		</si-jms:outbound-channel-adapter>
 	</si:chain>
 
-	<si:logging-channel-adapter
-		id="logger" expression="headers" level="INFO" />
+	<si:logging-channel-adapter id="logger"
+		expression="headers" level="INFO" />
 
 </beans>
