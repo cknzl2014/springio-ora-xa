@@ -98,28 +98,28 @@
 			<groupId>com.oracle.java</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<scope>system</scope>
-			<systemPath>${ORA_JARS}/ojdbc6.jar</systemPath>
+			<systemPath>${ORACLE_HOME}/jdbc/lib/ojdbc8.jar</systemPath>
 			<version>${oracle_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.java</groupId>
 			<artifactId>orai18n</artifactId>
 			<scope>system</scope>
-			<systemPath>${ORA_JARS}/orai18n.jar</systemPath>
+			<systemPath>${ORACLE_HOME}/jlib/orai18n.jar</systemPath>
 			<version>${oracle_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.java</groupId>
 			<artifactId>orai18n-mapping</artifactId>
 			<scope>system</scope>
-			<systemPath>${ORA_JARS}/orai18n-mapping.jar</systemPath>
+			<systemPath>${ORACLE_HOME}/jlib/orai18n-mapping.jar</systemPath>
 			<version>${oracle_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.java</groupId>
 			<artifactId>aqapi</artifactId>
 			<scope>system</scope>
-			<systemPath>${ORA_JARS}/aqapi.jar</systemPath>
+			<systemPath>${ORACLE_HOME}/rdbms/jlib/aqapi.jar</systemPath>
 			<version>${oracle_version}</version>
 		</dependency>
 	</dependencies>

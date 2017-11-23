@@ -13,12 +13,6 @@
 	<import resource="conn-activemq.xml" />
 	<import resource="conn-oracle.xml" />
 
-	<tx:advice id="txAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<tx:method name="*" />
-		</tx:attributes>
-	</tx:advice>
-
 	<bean id="cachingDestinationResolver"
 		class="org.springframework.jms.support.destination.JndiDestinationResolver">
 		<property name="cache" value="true" />
@@ -37,7 +31,6 @@
 		<property name="concurrentConsumers" value="1" />
 		<property name="receiveTimeout" value="1000" />
 		<property name="cacheLevel" value="3" />
-<!-- 		<property name="destinationResolver" ref="cachingDestinationResolver"/> -->
 		<property name="backOff">
 			<bean class="org.springframework.util.backoff.ExponentialBackOff">
 				<property name="initialInterval" value="2000" />
@@ -52,28 +45,15 @@
 
 	<si:channel id="myChannel"/>
 
-	<bean id="OracleAQ.JmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<property name="connectionFactory" ref="OracleAQConnectionFactory" />
-		<property name="destinationResolver" ref="cachingDestinationResolver"/>
-	</bean>
-
 	<si:chain id="handler.chain" input-channel="myChannel">
 		<si-jms:outbound-channel-adapter id="OracleAQ.JmsAdapter"
-			destination-name="AQ.SRUMSGIN1" jms-template="OracleAQ.JmsTemplate">
+			connection-factory="OracleAQConnectionFactory" session-transacted="true" 
+			destination-name="AQ.SRUMSGIN1" destination-resolver="cachingDestinationResolver"
+			>
 		</si-jms:outbound-channel-adapter>
 	</si:chain>
 
-
 	<si:logging-channel-adapter
 		id="logger" expression="headers" level="INFO" />
-
-<!-- 	<si:channel id="errorChannel" /> -->
-	
-<!-- 	<bean id="errorHandler" class="example.ErrorHandler"> -->
-<!-- 		<property name="logStackTrace" value="false"/> -->
-<!-- 	</bean> -->
-
-<!-- 	<si:service-activator -->
-<!-- 		input-channel="errorChannel" ref="errorHandler" method="handleError" /> -->
 
 </beans>

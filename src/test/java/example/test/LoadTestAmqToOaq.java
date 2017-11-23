@@ -47,7 +47,7 @@ public class LoadTestAmqToOaq extends TestBase {
 	@Test
 	public void testSendAmqMessages()
 			throws InterruptedException, JMSException, IOException, TransformerException {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 1000; i++) {
 			sendAmqMessage(IN_AMQ_QUEUE_NAME, TEST_XML, true);
 		}
 	}
